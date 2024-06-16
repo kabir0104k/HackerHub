@@ -1,17 +1,290 @@
-<div>
-        <div id='disqus_thread'></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hacker Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
         
-        <script type='text/javascript'>
-            var disqus_shortname = '{{ site.disqus-id }}';
-            (function () {
-                var dsq = document.createElement('script');
-                dsq.type = 'text/javascript';
-                dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: 'VT323', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+            margin: 0;
+            text-align: center;
+            overflow: hidden;
+        }
+        h1 {
+            font-family: 'VT323',
+            color: #56b356;
+            margin-bottom: 20px;
+            animation: fadeIn 2s;
+            font-size: 3.6em; /* Cyber Portal */
+        }
+        select, input {
+            background-color: rgb(0, 0, 0); /* Change dropdown background to black */
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            margin-top: 10px;
+            padding: 10px; /* Increase padding to enlarge the box */
+            font-size: 16px; /* Increase font size */
+            transition: all 0.3s ease;
+            width: 300px; /* Select List */
+        }
+        input:active, {
+            background-color: #00FF00;
+            color: black;
+        }
+        a {
+            color: #00FF00;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        a:visited {
+            color: red;
+            text-decoration: underline;
+        }
+        a:hover {
+            color: white;
+            /* Remove glow effect */
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin: 10px 0;
+        }
+        #content {
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="content">
+        <h1>Cyber Portal</h1>
         
-        <noscript>Please enable JavaScript to view the <a href='http://disqus.com/?ref_noscript'> comments.</a></noscript>
-        <a href='http://disqus.com' class='dsq-brlink'>comments powered by<span class='logo-disqus'>Disqus</span></a>
-</div>
+        <p>
+            <select id="rss_sites" onchange="checkSelection()">
+                <option value="">Resources Vault</option>
+                <option value="GB Hackers">GB Hackers</option>
+                <option value="GB Hackers Comments">GB Hackers Comments</option>
+                <option value="#" disabled>----DATA BREACHES----</option>
+                <option value="HackRead">HackRead</option>
+                <option value="HackRead Comments">HackRead Comments</option>
+                <option value="#" disabled>----Blue Team----</option>
+                <option value="Data Breaches">Data Breaches</option>
+                <option value="Google News US">Google News US</option>
+            </select>
+            <input type="button" id="go_button" value="Go!" onclick="handleClick()" style="display: none;">
+        </p>
+        <div id="rss_output"></div>
+    </div>
+   
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <script>
+        const rssUrls = {
+            "GB Hackers": [
+                { url: "https://chatgpt.com", title: "GPT" },
+                { url: "https://example1.com/article2", title: "GB Hackers Article 2" },
+                { url: "https://example1.com/article3", title: "GB Hackers Article 3" }
+            ],
+            "GB Hackers Comments": [
+                { url: "https://example2.com/comment1", title: "GB Hackers Comment 1" },
+                { url: "https://example2.com/comment2", title: "GB Hackers Comment 2" },
+                { url: "https://example2.com/comment3", title: "GB Hackers Comment 3" }
+            ],
+            "HackRead": [
+                { url: "https://example3.com/news1", title: "HackRead News 1" },
+                { url: "https://example3.com/news2", title: "HackRead News 2" },
+                { url: "https://example3.com/news3", title: "HackRead News 3" }
+            ],
+            "HackRead Comments": [
+                { url: "https://example4.com/comment1", title: "HackRead Comment 1" },
+                { url: "https://example4.com/comment2", title: "HackRead Comment 2" },
+                { url: "https://example4.com/comment3", title: "HackRead Comment 3" }
+            ],
+            "Data Breaches": [
+                { url: "https://example5.com/breach1", title: "Data Breach 1" },
+                { url: "https://example5.com/breach2", title: "Data Breach 2" },
+                { url: "https://example5.com/breach3", title: "Data Breach 3" }
+            ],
+            "Google News US": [
+                { url: "https://example6.com/news1", title: "Google News US 1" },
+                { url: "https://example6.com/news2", title: "Google News US 2" },
+                { url: "https://example6.com/news3", title: "Google News US 3" }
+            ]
+        };
+
+        function checkSelection() {
+            const rssSite = document.getElementById('rss_sites').value;
+            const goButton = document.getElementById('go_button');
+            if (rssSite) {
+                goButton.style.display = 'inline';
+            } else {
+                goButton.style.display = 'none';
+                document.getElementById('rss_output').innerHTML = '';
+            }
+        }
+
+        function handleClick() {
+            const goButton = document.getElementById('go_button');
+            goButton.classList.add('clicked');
+            displayUrls();
+            setTimeout(() => {
+                goButton.classList.remove('clicked');
+            }, 200); // Adjust the time to how long you want the effect to last
+        }
+
+        function displayUrls() {
+            const rssSite = document.getElementById('rss_sites').value;
+            const urls = rssUrls[rssSite] || [];
+            let output = `<h2>${rssSite} Links</h2><ul>`;
+            urls.forEach(link => {
+                output += `<li><a href="${link.url}" target="_blank">${link.title}</a></li>`;
+            });
+            output += '</ul>';
+            document.getElementById('rss_output').innerHTML = output;
+        }
+
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#00FF00"
+                },
+                shape: {
+                    type: "circle",
+                    stroke: {
+                        width: 0,
+                        color: "#000000"
+                    },
+                    polygon: {
+                        nb_sides: 5
+                    },
+                    image: {
+                        src: "img/github.svg",
+                        width: 100,
+                        height: 100
+                    }
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false,
+                    anim: {
+                        enable: false,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 40,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#00FF00",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                    attract: {
+                        enable: false,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    bubble: {
+                        distance: 400,
+                        size: 40,
+                        duration: 2,
+                        opacity: 8,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 4
+                    },
+                    remove: {
+                        particles_nb: 2
+                    }
+                }
+            },
+            retina_detect: true
+        });
+    </script>
+</body>
+</html>
