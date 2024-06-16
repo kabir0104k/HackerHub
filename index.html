@@ -14,27 +14,27 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 50vh;
+            height: 100vh;
             margin: 0;
             text-align: center;
             overflow: hidden;
         }
         h1 {
-            font-family: 'VT323',
-            color: #56b356;
+            font-family: 'VT323', sans-serif;
+            color: #00ff00;
             margin-bottom: 20px;
             animation: fadeIn 2s;
-            font-size: 3.6em; /* Cyber Portal */
+            font-size: 4em;
         }
         select, input {
-            background-color: rgb(0, 0, 0); /* Change dropdown background to black */
+            background-color: rgb(0, 0, 0); /* Change dropdown background to transparent */
             color: #00ff00;
-            border: 1px solid #00ff00;
-            margin-top: 10px;
+            border: 1px solid #0df709;
+            margin-top: 0px;
             padding: 10px; /* Increase padding to enlarge the box */
-            font-size: 16px; /* Increase font size */
+            font-size: 15px; /* Increase font size */
             transition: all 0.3s ease;
-            width: 300px; /* Select List */
+            width: 600px; /* Select List */
         }
         input:active, {
             background-color: #00FF00;
@@ -50,7 +50,7 @@
             text-decoration: underline;
         }
         a:hover {
-            color: white;
+            color: rgb(238, 255, 0);
             /* Remove glow effect */
         }
         ul {
@@ -74,6 +74,18 @@
             left: 0;
             z-index: 0;
         }
+        .glass {
+            background: rgba(0, 0, 0, 0);
+            border-radius: 10px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            max-width: 600px;
+            width: 80%;
+            z-index: 1;
+        }
         footer {
             position: absolute;
             bottom: 10px;
@@ -89,7 +101,9 @@
 </head>
 <body>
     <div id="particles-js"></div>
-    <div id="content">
+    <div id="content" class="glass">
+
+
         <h1>Cyber Portal</h1>
         
         <p>
@@ -97,10 +111,8 @@
                 <option value="">Resources Vault</option>
                 <option value="GB Hackers">GB Hackers</option>
                 <option value="GB Hackers Comments">GB Hackers Comments</option>
-                <option value="#" disabled>----DATA BREACHES----</option>
                 <option value="HackRead">HackRead</option>
                 <option value="HackRead Comments">HackRead Comments</option>
-                <option value="#" disabled>----Blue Team----</option>
                 <option value="Data Breaches">Data Breaches</option>
                 <option value="Google News US">Google News US</option>
             </select>
